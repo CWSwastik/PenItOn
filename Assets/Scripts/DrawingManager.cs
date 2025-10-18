@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.EventSystems; 
 
 public class DrawingManager : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class DrawingManager : MonoBehaviour
         // Only allow drawing while game is paused (before pressing Space)
         if (Time.timeScale == 0f)
         {
+            if (EventSystem.current.IsPointerOverGameObject(-1))
+                return;
+                
             if (Input.GetKeyDown(KeyCode.S)) currentGravityType = LinePhysics.GravityDirection.Down;
             if (Input.GetKeyDown(KeyCode.W)) currentGravityType = LinePhysics.GravityDirection.Up;
             if (Input.GetKeyDown(KeyCode.A)) currentGravityType = LinePhysics.GravityDirection.Left;

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;  // for TextMeshPro
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
@@ -7,6 +8,10 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
     [SerializeField] private GameOverUI gameOverUI;
+    [SerializeField] private GameObject pauseUIPanel;
+    [SerializeField] private Button pauseUIResumeButton;
+    [SerializeField] private Button pauseUIRestartButton;
+
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI levelText;
 
@@ -22,7 +27,11 @@ public class GameController : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        pauseUIPanel.SetActive(false);
+        pauseUIResumeButton.onClick.AddListener(() => { UnpauseGame(); });
+        pauseUIRestartButton.onClick.AddListener(() => { RetryLevel(); });
     }
+
     void Start()
     {
         Time.timeScale = 0f;
@@ -44,6 +53,11 @@ public class GameController : MonoBehaviour
 
         if (gameStarted && !goalReached)
         {
+            if (Time.timeScale == 1f && Input.GetKeyDown(KeyCode.Escape))
+            {
+                PauseGame();
+            }
+            
             timeRemaining -= Time.deltaTime;
             if (timeRemaining <= 0f)
             {
@@ -103,9 +117,21 @@ public class GameController : MonoBehaviour
         Debug.Log("Go TO NEXT LEVEL PLS");
         SceneManager.LoadScene(0);
     }
-    
+
     public void RetryLevel()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0f; // shitty fix can't use 0f cuz drawing manager uses that
+        pauseUIPanel.SetActive(true);
+    }
+    
+    public void UnpauseGame()
+    {
+        Time.timeScale = 1f;
+        pauseUIPanel.SetActive(false);
     }
 }
