@@ -2,7 +2,16 @@ using UnityEngine;
 
 public class GoalTrigger : MonoBehaviour
 {
-    [SerializeField] private GameController gameController;
+    private GameController gameController;
+
+    private void Start()
+    {
+        gameController = FindFirstObjectByType<GameController>();
+        if (gameController == null)
+        {
+            Debug.LogError("❌ No GameController found in the scene!");
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
