@@ -1713,6 +1713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DrawingManager
   linePrefab: {fileID: 3469271018748396976, guid: 92d48730a23571b41b87a801453d690e, type: 3}
   lineWidth: 0.06
+  penCursorTexture: {fileID: 2800000, guid: 794ee0dbb5e62684e847a79cc52f1890, type: 3}
 --- !u!4 &1711338416
 Transform:
   m_ObjectHideFlags: 0
@@ -1808,7 +1809,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &1711920958
 RectTransform:
@@ -2181,10 +2182,10 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1462709225}
   - {fileID: 956482063}
   - {fileID: 1543136640}
   - {fileID: 1148261227}
-  - {fileID: 1462709225}
   m_Father: {fileID: 1711920958}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -13,19 +13,46 @@ public class DrawingManager : MonoBehaviour
 
     private LinePhysics.GravityDirection currentGravityType = LinePhysics.GravityDirection.Down;
 
+    public Texture2D penCursorTexture; // assign in Inspector
+    private Vector2 hotspot = new Vector2(30, 500); // where the "tip" of the pen is
 
+    void Start()
+    {
+        SetPenCursorColor(Color.red);
+    }
     void Update()
     {
+        // if (Time.timeScale == 0f)
+        //     Cursor.SetCursor(penCursorTexture, hotspot, CursorMode.Auto);
+        // else
+        //     Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        
         // Only allow drawing while game is paused (before pressing Space)
         if (Time.timeScale == 0f)
         {
             if (EventSystem.current.IsPointerOverGameObject(-1))
                 return;
-                
-            if (Input.GetKeyDown(KeyCode.S)) currentGravityType = LinePhysics.GravityDirection.Down;
-            if (Input.GetKeyDown(KeyCode.W)) currentGravityType = LinePhysics.GravityDirection.Up;
-            if (Input.GetKeyDown(KeyCode.A)) currentGravityType = LinePhysics.GravityDirection.Left;
-            if (Input.GetKeyDown(KeyCode.D)) currentGravityType = LinePhysics.GravityDirection.Right;
+
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                currentGravityType = LinePhysics.GravityDirection.Down;
+                SetPenCursorColor(Color.red);
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                currentGravityType = LinePhysics.GravityDirection.Up;
+                SetPenCursorColor(Color.green);
+            }
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                currentGravityType = LinePhysics.GravityDirection.Left;
+                SetPenCursorColor(Color.blue);
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                currentGravityType = LinePhysics.GravityDirection.Right;
+                SetPenCursorColor(Color.yellow);
+            } 
 
 
             if (Input.GetMouseButtonDown(0))
@@ -35,6 +62,26 @@ public class DrawingManager : MonoBehaviour
             else if (Input.GetMouseButtonUp(0))
                 FinishLine();
         }
+    }
+    void SetPenCursorColor(Color c)
+    {
+        if (penCursorTexture == null) return;
+
+        // Create a copy of the original texture
+        Texture2D cursorTex = Instantiate(penCursorTexture);
+
+        // Tint all pixels with the line color
+        Color[] pixels = cursorTex.GetPixels();
+        for (int i = 0; i < pixels.Length; i++)
+        {
+            // Multiply original alpha by new color
+            pixels[i] = new Color(c.r, c.g, c.b, pixels[i].a);
+        }
+        cursorTex.SetPixels(pixels);
+        cursorTex.Apply();
+
+        // Set the cursor
+        Cursor.SetCursor(cursorTex, hotspot, CursorMode.Auto);
     }
 
     void StartLine()
@@ -66,6 +113,8 @@ public class DrawingManager : MonoBehaviour
 
         lineRenderer.startColor = c;
         lineRenderer.endColor = c;
+
+        SetPenCursorColor(c);
 
         Vector2 startPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         points.Add(startPoint);
