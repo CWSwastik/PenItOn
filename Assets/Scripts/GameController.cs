@@ -21,7 +21,7 @@ public class GameController : MonoBehaviour
 
     private bool gameStarted = false;
     private bool goalReached = false;
-    private float gameDuration = 10f;
+    private float gameDuration = 15f;
     private float timeRemaining;
 
     void Awake()
